@@ -5,13 +5,7 @@ export async function parseLog(filePath: string) {
     const logLines = logData.split('\n');
 
     const logRegex = new RegExp(
-        `^(?<ip>\\d{1,3}(?:\\.\\d{1,3}){3})\\s+` + // IP address
-            `(?<ident>[^ ]+)\\s+` + // Ident
-            `(?<user>[^ ]+)\\s+` + // User
-            `\$begin:math:display$(?<timestamp>[^\\$end:math:display$]+)\\]\\s+` + // Timestamp
-            `\"(?<method>[A-Z]+)\\s+(?<url>[^ ]+)\\s+(?<protocol>[^"]+)\"\\s+` + // Request
-            `(?<status>\\d{3})\\s+` + // Status code
-            `(?<size>\\d+)`, // Response size
+        /^(?<ip>\d{1,3}(?:\.\d{1,3}){3})\s+(?<ident>[^ ]+)\s+(?<user>[^ ]+)\s+\[(?<timestamp>[^\]]+)\]\s+"(?<method>[A-Z]+)\s+(?<url>[^ ]+)\s+(?<protocol>[^"]+)"\s+(?<status>\d{3})\s+(?<size>\d+)/,
     );
 
     const uniqueIPs: Set<string> = new Set();
