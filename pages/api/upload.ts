@@ -12,26 +12,23 @@ const uploadHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     const formidable = require('formidable');
-    const form = new formidable.IncomingForm();
-    form.uploadDir = './logFileUploads'; // Temporary directory to store the uploaded file
-    form.keepExtensions = true; // Keep the original file extension
+    const form = new formidable.IncomingForm({
+        uploadDir: path.join(process.cwd(), '/uploads'),
+        keepExtensions: true,
+    });
 
     form.parse(req, async (err: any, fields: any, files: any) => {
         if (err) {
             return res.status(500).json({ message: 'File upload failed' });
         }
 
-        console.log('Parsed files:', files); // Add this log to inspect the files object
-
-        // Access the first file in the logFile array
         const logFile = files.logFile[0];
         if (!logFile) {
             return res.status(400).json({ message: 'No log file uploaded' });
         }
 
-        const data = await fs.readFile(logFile.filepath); // Read file content
+        const data = await fs.readFile(logFile.filepath);
 
-        // Define the storage path for the final location of the file
         const storagePath = path.join(
             process.cwd(),
             'uploads',
@@ -42,7 +39,7 @@ const uploadHandler = async (req: NextApiRequest, res: NextApiResponse) => {
         await fs.mkdir(path.join(process.cwd(), 'uploads'), {
             recursive: true,
         });
-        await fs.writeFile(storagePath, data); // Write the file to the target directory
+        await fs.writeFile(storagePath, data);
 
         return res.status(200).json({
             message: 'File uploaded and stored successfully',
