@@ -16,6 +16,7 @@ const uploadHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     const form = new formidable.IncomingForm({
         uploadDir: path.join(process.cwd(), '/uploads'),
         keepExtensions: true,
+        maxFileSize: 250 * 1024 * 1024, // 250MB - *208MB is about 1 million lines*
     });
 
     form.parse(req, async (err: any, fields: any, files: any) => {
