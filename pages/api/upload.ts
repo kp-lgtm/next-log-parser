@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import fs from 'fs/promises';
-import { parseLog } from '@/utils/logParser';
+import { parseLog } from '../../src/utils/logParser';
 import path from 'path';
 
 // Disable built-in Next.js body parser
@@ -12,11 +12,22 @@ const uploadHandler = async (req: NextApiRequest, res: NextApiResponse) => {
         return;
     }
 
+    const uploadDir = path.join(process.cwd(), 'uploads');
+
+    try {
+        await fs.mkdir(uploadDir, { recursive: true });
+    } catch (error) {
+        console.error('Failed to create upload directory:', error);
+        return res
+            .status(500)
+            .json({ message: 'Failed to create upload directory' });
+    }
+
     const formidable = require('formidable');
     const form = new formidable.IncomingForm({
-        uploadDir: path.join(process.cwd(), '/uploads'),
+        uploadDir: uploadDir,
         keepExtensions: true,
-        maxFileSize: 250 * 1024 * 1024, // 250MB - *208MB is about 1 million lines*
+        maxFileSize: 250 * 1024 * 1024, // 250MB --> 208MB ≈ 1 million lines
     });
 
     form.parse(req, async (err: any, fields: any, files: any) => {

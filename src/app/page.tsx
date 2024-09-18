@@ -45,47 +45,60 @@ export default function Home() {
     };
 
     return (
-        <div>
-            <h1>Upload Log File</h1>
-            <input type="file" accept=".log" onChange={handleFileChange} />
-            <button
-                onClick={uploadFile}
-                disabled={isUploading || !selectedLogFile}
-            >
-                {isUploading ? 'Uploading...' : 'Upload and Parse'}
-            </button>
+        <div className="container">
+            <header>
+                <h1>Upload Log File</h1>
+            </header>
 
-            {error && <p style={{ color: 'red' }}>Error: {error}</p>}
+            <main>
+                <article>
+                    <input
+                        type="file"
+                        accept=".log"
+                        onChange={handleFileChange}
+                    />
+                    <button
+                        onClick={uploadFile}
+                        disabled={isUploading || !selectedLogFile}
+                    >
+                        {isUploading ? 'Uploading...' : 'Upload and Parse'}
+                    </button>
 
-            {parsedData && (
-                <div>
-                    <h2>Parsed Log Data</h2>
-                    <p>
-                        Number of unique IP addresses:{' '}
-                        {parsedData.uniqueIPCount}
-                    </p>
-                    <h3>Top 3 Most Visited URLs</h3>
-                    <ul>
-                        {parsedData.top3Urls.map(
-                            (url: [string, number], index: number) => (
-                                <li key={index}>
-                                    {url[0]} - {url[1]} visits
-                                </li>
-                            ),
-                        )}
-                    </ul>
-                    <h3>Top 3 Most Active IP Addresses</h3>
-                    <ul>
-                        {parsedData.top3IPs.map(
-                            (ip: [string, number], index: number) => (
-                                <li key={index}>
-                                    {ip[0]} - {ip[1]} requests
-                                </li>
-                            ),
-                        )}
-                    </ul>
-                </div>
-            )}
+                    {error && <p className="error">Error: {error}</p>}
+                </article>
+
+                {parsedData && (
+                    <article>
+                        <h2>Parsed Log Data</h2>
+                        <p>
+                            Number of unique IP addresses:{' '}
+                            {parsedData.uniqueIPCount}
+                        </p>
+
+                        <h3>Top 3 Most Visited URLs</h3>
+                        <ul>
+                            {parsedData.top3Urls.map(
+                                (url: [string, number], index: number) => (
+                                    <li key={index}>
+                                        {url[0]} - {url[1]} visits
+                                    </li>
+                                ),
+                            )}
+                        </ul>
+
+                        <h3>Top 3 Most Active IP Addresses</h3>
+                        <ul>
+                            {parsedData.top3IPs.map(
+                                (ip: [string, number], index: number) => (
+                                    <li key={index}>
+                                        {ip[0]} - {ip[1]} requests
+                                    </li>
+                                ),
+                            )}
+                        </ul>
+                    </article>
+                )}
+            </main>
         </div>
     );
 }
