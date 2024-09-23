@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import '@picocss/pico';
 
 export const metadata: Metadata = {
     title: 'Log Parser',

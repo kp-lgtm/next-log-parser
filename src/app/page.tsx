@@ -19,10 +19,10 @@ export default function Home() {
         setIsUploading(true);
         setError(null);
 
-        const formData = new FormData();
-        formData.append('logFile', selectedLogFile);
-
         try {
+            const formData = new FormData();
+            formData.append('logFile', selectedLogFile);
+
             const res = await fetch('/api/upload', {
                 method: 'POST',
                 body: formData,
@@ -45,26 +45,31 @@ export default function Home() {
     };
 
     return (
-        <div className="container">
+        <div>
             <header>
-                <h1>Upload Log File</h1>
+                <h1 className="text-5xl font-bold underline">
+                    Upload Log File
+                </h1>
             </header>
 
             <main>
                 <article>
-                    <input
-                        type="file"
-                        accept=".log"
-                        onChange={handleFileChange}
-                    />
-                    <button
-                        onClick={uploadFile}
-                        disabled={isUploading || !selectedLogFile}
-                    >
-                        {isUploading ? 'Uploading...' : 'Upload and Parse'}
-                    </button>
+                    <form method="POST" encType="multipart/form-data">
+                        <input
+                            type="file"
+                            accept=".log"
+                            onChange={handleFileChange}
+                            style={{ width: 'auto' }}
+                        />
+                        <button
+                            onClick={uploadFile}
+                            disabled={isUploading || !selectedLogFile}
+                        >
+                            {isUploading ? 'Uploading...' : 'Upload and Parse'}
+                        </button>
 
-                    {error && <p className="error">Error: {error}</p>}
+                        {error && <p>Error: {error}</p>}
+                    </form>
                 </article>
 
                 {parsedData && (
