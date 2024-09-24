@@ -1,42 +1,51 @@
 import fs from 'fs/promises';
 
 export async function parseLog(filePath: string) {
+    // Reading the entire log file into memory is the fastest
+    // way to parse log files of the size that we're dealing with
+    // due to the relatively small size of the log files.
+
+    // A more memory efficient approach would be to read the file
+    // line by line, but this would be slower for the size of log
     const logData = await fs.readFile(filePath, 'utf-8');
     const logLines = logData.split('\n');
 
-    const logRegex = new RegExp(
-        /^(?<ip>\d{1,3}(?:\.\d{1,3}){3})\s+(?<ident>[^ ]+)\s+(?<user>[^ ]+)\s+\[(?<timestamp>[^\]]+)\]\s+"(?<method>[A-Z]+)\s+(?<url>[^ ]+)\s+(?<protocol>[^"]+)"\s+(?<status>\d{3})\s+(?<size>\d+)/,
-    );
-
+    const totalLogCount = logLines.length;
     const uniqueIPs: Set<string> = new Set();
     const urlVisits: Map<string, number> = new Map();
     const ipActivity: Map<string, number> = new Map();
     let invalidLogCount = 0;
+    const errorThreshold = 0.1; // 10%)
 
-    logLines.forEach((logLine, index) => {
-        const match = logLine.match(logRegex);
+    // Regular expressions to match IP addresses and HTTP requests
+    // Also allows for leading zeroes in IP address octets
+    const ipRE = new RegExp(
+        /^((25[0-5]|2[0-4]\d|1\d{2}|0?\d{1,2})\.){3}(25[0-5]|2[0-4]\d|1\d{2}|0?\d{1,2})$/,
+    );
+    const requestRE = new RegExp(
+        /(GET|POST|PUT|DELETE) (\/[^\s"]*|https?:\/\/[^\s"]*) HTTP\/[0-9.]+/,
+    );
 
-        if (match && match.groups) {
-            const ip = match.groups.ip;
-            const url = match.groups.url;
+    logLines.forEach((line, i) => {
+        const logLineChunkArr = line.split(' ');
+        const ip = logLineChunkArr[0];
+        const url = logLineChunkArr[6];
+        const request = logLineChunkArr.slice(5, 8).join(' ');
 
+        if (ip.match(ipRE) && request.match(requestRE)) {
             uniqueIPs.add(ip);
-
             urlVisits.set(url, (urlVisits.get(url) || 0) + 1);
-
             ipActivity.set(ip, (ipActivity.get(ip) || 0) + 1);
         } else {
-            // Increment invalid log counter if log format doesn't match
-            invalidLogCount++;
-            console.error(
-                `Invalid log format on line ${index + 1}: ${logLine}`,
-            );
+            // Increment invalid log counter if log format doesn't match and
+            // ignore empty lines
+            if (!!line[0]) {
+                invalidLogCount++;
+                console.error(`Invalid log format on line ${i + 1}: ${line}`);
+            }
         }
     });
 
-    // Check if a significant number of logs are invalid
-    const totalLogCount = logLines.length;
-    const errorThreshold = 0.1; // 10%
     if (invalidLogCount / totalLogCount > errorThreshold) {
         throw new Error('Log file contains too many invalid entries');
     }
