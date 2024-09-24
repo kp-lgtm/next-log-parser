@@ -31,8 +31,6 @@ export async function POST(req: NextRequest) {
         await writeFile(filePath, buffer);
         console.log('File saved to:', filePath);
 
-        console.log('logFile;', logFile);
-
         const parsedData = await parseLog(filePath);
         await unlink(filePath);
 

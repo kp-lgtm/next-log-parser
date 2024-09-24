@@ -50,17 +50,34 @@ export async function parseLog(filePath: string) {
         throw new Error('Log file contains too many invalid entries');
     }
 
-    const uniqueIPCount = uniqueIPs.size;
-    const top3Urls = [...urlVisits.entries()]
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 3);
-    const top3IPs = [...ipActivity.entries()]
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 3);
+    const groupedUrls = groupByVisitCount(urlVisits);
+
+    const groupedIPs = groupByVisitCount(ipActivity);
 
     return {
-        uniqueIPCount,
-        top3Urls,
-        top3IPs,
+        uniqueIPCount: uniqueIPs.size,
+        groupedUrls: limitGroupEntries(groupedUrls),
+        groupedIPs: limitGroupEntries(groupedIPs),
     };
+}
+
+function groupByVisitCount(visits: Map<string, number>) {
+    const visitGroups: Map<number, string[]> = new Map();
+
+    visits.forEach((count, url) => {
+        if (!visitGroups.has(count)) {
+            visitGroups.set(count, []);
+        }
+        visitGroups.get(count)!.push(url);
+    });
+
+    return [...visitGroups.entries()].sort((a, b) => b[0] - a[0]).slice(0, 3);
+}
+
+function limitGroupEntries(groups: [number, string[]][]) {
+    return groups.map(([count, items]) => {
+        const displayedItems = items.slice(0, 5);
+        const othersCount = items.length - displayedItems.length;
+        return { count, displayedItems, othersCount };
+    });
 }

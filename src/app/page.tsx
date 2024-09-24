@@ -30,7 +30,7 @@ export default function Home() {
 
             if (res.ok) {
                 const data = await res.json();
-                setParsedData(data.data); // Set the parsed data in state
+                setParsedData(data.data);
             } else {
                 const errorData = await res.json();
                 setError(
@@ -47,14 +47,12 @@ export default function Home() {
     return (
         <div>
             <header>
-                <h1 className="text-5xl font-bold underline">
-                    Upload Log File
-                </h1>
+                <h1>Upload Log File</h1>
             </header>
 
             <main>
                 <article>
-                    <form method="POST" encType="multipart/form-data">
+                    <form>
                         <input
                             type="file"
                             accept=".log"
@@ -80,23 +78,35 @@ export default function Home() {
                             {parsedData.uniqueIPCount}
                         </p>
 
-                        <h3>Top 3 Most Visited URLs</h3>
+                        <h3>Top 3 URL Groups</h3>
                         <ul>
-                            {parsedData.top3Urls.map(
-                                (url: [string, number], index: number) => (
+                            {parsedData.groupedUrls.map(
+                                (
+                                    { count, displayedItems, othersCount }: any,
+                                    index: number,
+                                ) => (
                                     <li key={index}>
-                                        {url[0]} - {url[1]} visits
+                                        {displayedItems.join(', ')}
+                                        {othersCount > 0 &&
+                                            ` and ${othersCount} others`}{' '}
+                                        - {count} visits
                                     </li>
                                 ),
                             )}
                         </ul>
 
-                        <h3>Top 3 Most Active IP Addresses</h3>
+                        <h3>Top 3 IP Groups</h3>
                         <ul>
-                            {parsedData.top3IPs.map(
-                                (ip: [string, number], index: number) => (
+                            {parsedData.groupedIPs.map(
+                                (
+                                    { count, displayedItems, othersCount }: any,
+                                    index: number,
+                                ) => (
                                     <li key={index}>
-                                        {ip[0]} - {ip[1]} requests
+                                        {displayedItems.join(', ')}
+                                        {othersCount > 0 &&
+                                            ` and ${othersCount} others`}{' '}
+                                        - {count} requests
                                     </li>
                                 ),
                             )}
