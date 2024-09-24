@@ -61,6 +61,7 @@ export async function parseLog(filePath: string) {
     };
 }
 
+// Helper function to group URLs or IPs by visit count
 function groupByVisitCount(visits: Map<string, number>) {
     const visitGroups: Map<number, string[]> = new Map();
 
@@ -74,9 +75,11 @@ function groupByVisitCount(visits: Map<string, number>) {
     return [...visitGroups.entries()].sort((a, b) => b[0] - a[0]).slice(0, 3);
 }
 
+// Helper function to limit the number of entries in each group
+// to condense the amount of data displayed
 function limitGroupEntries(groups: [number, string[]][]) {
     return groups.map(([count, items]) => {
-        const displayedItems = items.slice(0, 5);
+        const displayedItems = items.slice(0, 3);
         const othersCount = items.length - displayedItems.length;
         return { count, displayedItems, othersCount };
     });
