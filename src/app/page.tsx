@@ -46,72 +46,92 @@ export default function Home() {
     };
 
     return (
-        <div>
+        <div className={styles.container}>
             <header>
-                <h1>Upload Log File</h1>
+                <h1 className={styles.header}>Upload Log File</h1>
             </header>
 
             <main>
                 <article>
-                    <form>
+                    <form className={styles.form}>
                         <input
                             type="file"
                             accept=".log"
                             onChange={handleFileChange}
-                            style={{ width: 'auto' }}
+                            className={styles.fileInput}
                         />
                         <button
                             onClick={uploadFile}
                             disabled={isUploading || !selectedLogFile}
+                            className={styles.submitButton}
                         >
                             {isUploading ? 'Uploading...' : 'Upload and Parse'}
                         </button>
 
-                        {error && <p>Error: {error}</p>}
+                        {error && (
+                            <p className={styles.errorMessage}>
+                                Error: {error}
+                            </p>
+                        )}
                     </form>
                 </article>
 
                 {parsedData && (
-                    <article>
-                        <h2>Parsed Log Data</h2>
-                        <p>
+                    <article className={styles.article}>
+                        <h2 className={styles.parsedDataTitle}>
+                            Parsed Log Data
+                        </h2>
+                        <h3 className={styles.parsedDataSubtitle}>
+                            Unique IP Addresses
+                        </h3>
+                        <p className={styles.listItem}>
                             Number of unique IP addresses:{' '}
-                            {parsedData.uniqueIPCount}
+                            <strong>{parsedData.uniqueIPCount}</strong>
                         </p>
 
-                        <h3>Top 3 URL Groups</h3>
-                        <ul>
+                        <h3 className={styles.parsedDataSubtitle}>
+                            Top 3 URL Groups
+                        </h3>
+                        <ol className={styles.list}>
                             {parsedData.groupedUrls.map(
                                 (
                                     { count, displayedItems, othersCount }: any,
                                     index: number,
                                 ) => (
-                                    <li key={index}>
+                                    <li key={index} className={styles.listItem}>
                                         {displayedItems.join(', ')}
                                         {othersCount > 0 &&
                                             ` and ${othersCount} others`}{' '}
-                                        - {count} visits
+                                        -{' '}
+                                        <strong>
+                                            {count} visit{count > 1 && 's'}
+                                        </strong>
                                     </li>
                                 ),
                             )}
-                        </ul>
+                        </ol>
 
-                        <h3>Top 3 IP Groups</h3>
-                        <ul>
+                        <h3 className={styles.parsedDataSubtitle}>
+                            Top 3 IP Groups
+                        </h3>
+                        <ol className={styles.list}>
                             {parsedData.groupedIPs.map(
                                 (
                                     { count, displayedItems, othersCount }: any,
                                     index: number,
                                 ) => (
-                                    <li key={index}>
+                                    <li key={index} className={styles.listItem}>
                                         {displayedItems.join(', ')}
                                         {othersCount > 0 &&
                                             ` and ${othersCount} others`}{' '}
-                                        - {count} requests
+                                        -{' '}
+                                        <strong>
+                                            {count} request{count > 1 && 's'}
+                                        </strong>
                                     </li>
                                 ),
                             )}
-                        </ul>
+                        </ol>
                     </article>
                 )}
             </main>

@@ -1,0 +1,113 @@
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.header {
+    font-size: 3rem;
+    text-align: center;
+    color: #3498db;
+    margin-bottom: 30px;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.fileInput {
+    padding: 10px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    border: 2px solid #3498db;
+    border-radius: 5px;
+    transition: border-color 0.3s ease;
+}
+
+.fileInput:hover {
+    border-color: #2980b9;
+}
+
+.submitButton {
+    background-color: #3498db;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.submitButton:hover {
+    background-color: #2980b9;
+}
+
+.submitButton:disabled {
+    background-color: #95a5a6;
+    cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+    .header {
+        font-size: 2.5rem;
+    }
+
+    .submitButton {
+        font-size: 1rem;
+        padding: 8px 16px;
+    }
+}
+
+.uniqueIP {
+    padding-left: 20px;
+}
+
+.list {
+    list-style: none;
+    padding: 0;
+}
+
+.listItem {
+    background: #ffffff;
+    margin: 10px 0;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.listItem:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.errorMessage {
+    color: #e74c3c;
+    font-weight: bold;
+    text-align: center;
+}
+
+.parsedDataTitle {
+    font-size: 2rem;
+    text-align: center;
+    color: #2c3e50;
+}
+
+.parsedDataSubtitle {
+    font-size: 1.5rem;
+    margin-top: 20px;
+    color: #34495e;
+}
+
+.article {
+    margin-top: 40px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
