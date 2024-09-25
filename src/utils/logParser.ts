@@ -8,6 +8,7 @@ export async function parseLog(filePath: string) {
     // A more memory efficient approach would be to read the file
     // line by line, but this would be slower for the size of log
     const logData = await fs.readFile(filePath, 'utf-8');
+    console.log(logData);
     const logLines = logData.split('\n');
 
     const totalLogCount = logLines.length;
@@ -58,6 +59,7 @@ export async function parseLog(filePath: string) {
         uniqueIPCount: uniqueIPs.size,
         groupedUrls: limitGroupEntries(groupedUrls),
         groupedIPs: limitGroupEntries(groupedIPs),
+        invalidLogCount,
     };
 }
 
