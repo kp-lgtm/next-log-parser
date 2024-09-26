@@ -1,3 +1,4 @@
+import logger from '../../../logger/logger';
 import { parseLog } from '@/utils/logParser';
 import { writeFile, mkdir, unlink } from 'fs/promises';
 import { NextRequest, NextResponse } from 'next/server';
@@ -20,7 +21,7 @@ export async function POST(req: NextRequest) {
     try {
         await mkdir(uploadDir, { recursive: true });
     } catch (error) {
-        console.error('Failed to create upload directory:', error);
+        logger.error('Failed to create upload directory:', error);
         return NextResponse.json(
             { message: 'Failed to create upload directory' },
             { status: 500 },
@@ -29,7 +30,7 @@ export async function POST(req: NextRequest) {
 
     try {
         await writeFile(filePath, buffer);
-        console.log('File saved to:', filePath);
+        logger.info('File saved to:', filePath);
 
         const parsedData = await parseLog(filePath);
         await unlink(filePath);
@@ -40,7 +41,7 @@ export async function POST(req: NextRequest) {
             status: 200,
         });
     } catch (error) {
-        console.error('Failed to save file:', error);
+        logger.error('Failed to save file:', error);
         return NextResponse.json(
             { message: 'Failed to save file' },
             { status: 500 },

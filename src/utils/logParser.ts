@@ -1,4 +1,5 @@
 import fs from 'fs/promises';
+import logger from '../logger/logger';
 
 export async function parseLog(filePath: string) {
     // Reading the entire log file into memory is the fastest
@@ -8,7 +9,6 @@ export async function parseLog(filePath: string) {
     // A more memory efficient approach would be to read the file
     // line by line, but this would be slower for the size of log
     const logData = await fs.readFile(filePath, 'utf-8');
-    console.log(logData);
     const logLines = logData.split('\n');
 
     const totalLogCount = logLines.length;
@@ -23,9 +23,6 @@ export async function parseLog(filePath: string) {
     const ipRE = new RegExp(
         /^((25[0-5]|2[0-4]\d|1\d{2}|0?\d{1,2})\.){3}(25[0-5]|2[0-4]\d|1\d{2}|0?\d{1,2})$/,
     );
-    const requestRE = new RegExp(
-        /(GET|POST|PUT|DELETE) (\/[^\s"]*|https?:\/\/[^\s"]*) HTTP\/[0-9.]+/,
-    );
 
     logLines.forEach((line, i) => {
         const logLineChunkArr = line.split(' ');
@@ -33,7 +30,7 @@ export async function parseLog(filePath: string) {
         const url = logLineChunkArr[6];
         const request = logLineChunkArr.slice(5, 8).join(' ');
 
-        if (ip.match(ipRE) && request.match(requestRE)) {
+        if (isValidIPv4(ip) && isValidHTTPRequest(request)) {
             uniqueIPs.add(ip);
             urlVisits.set(url, (urlVisits.get(url) || 0) + 1);
             ipActivity.set(ip, (ipActivity.get(ip) || 0) + 1);
@@ -42,7 +39,7 @@ export async function parseLog(filePath: string) {
             // ignore empty lines
             if (!!line[0]) {
                 invalidLogCount++;
-                console.error(`Invalid log format on line ${i + 1}: ${line}`);
+                logger.error(`Invalid log format on line ${i + 1}: ${line}`);
             }
         }
     });
@@ -64,7 +61,7 @@ export async function parseLog(filePath: string) {
 }
 
 // Helper function to group URLs or IPs by visit count
-function groupByVisitCount(visits: Map<string, number>) {
+export function groupByVisitCount(visits: Map<string, number>) {
     const visitGroups: Map<number, string[]> = new Map();
 
     visits.forEach((count, url) => {
@@ -79,10 +76,27 @@ function groupByVisitCount(visits: Map<string, number>) {
 
 // Helper function to limit the number of entries in each group
 // to condense the amount of data displayed
-function limitGroupEntries(groups: [number, string[]][]) {
+export function limitGroupEntries(groups: [number, string[]][]) {
     return groups.map(([count, items]) => {
         const displayedItems = items.slice(0, 3);
         const othersCount = items.length - displayedItems.length;
         return { count, displayedItems, othersCount };
     });
+}
+
+export function isValidIPv4(ip: string) {
+    const octets = ip.split('.');
+    if (octets.length !== 4) return false;
+
+    return octets.every(octet => {
+        const num = parseInt(octet, 10);
+        return num >= 0 && num <= 255;
+    });
+}
+
+export function isValidHTTPRequest(request: string) {
+    const requestRE = new RegExp(
+        /(GET|POST|PUT|DELETE) (\/[^\s"]*|https?:\/\/[^\s"]*) HTTP\/[0-9.]+/,
+    );
+    return request.match(requestRE);
 }
