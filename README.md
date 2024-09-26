@@ -91,16 +91,7 @@ Once running, you can access the app at `http://localhost:8080`.
 
 The parser expects logs to follow the **Common Log Format**. Example:
 
-    ```
     192.168.0.1 - - [10/Jul/2018:22:21:28 +0200] "GET /home HTTP/1.1" 200 3574 "-" "Mozilla/5.0"
-    ```
-
-Each log entry should include:
-- **IP address**
-- **Timestamp**
-- **HTTP request** (method, URL, HTTP version)
-- **Response status code**
-- **Response size**
 
 ### API Routes
 
@@ -112,11 +103,9 @@ Each log entry should include:
 
 The project uses **Jest** for unit testing. To run tests, use the following command:
 
-    ```bash
     npm run test
     # or if using yarn
     yarn test
-    ```
 
 Test files are located in the `tests` directory. The log parsing logic is thoroughly tested with both valid and invalid log entries.
 
