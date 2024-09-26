@@ -18,12 +18,6 @@ export async function parseLog(filePath: string) {
     let invalidLogCount = 0;
     const errorThreshold = 0.1; // 10%)
 
-    // Regular expressions to match IP addresses and HTTP requests
-    // Also allows for leading zeroes in IP address octets
-    const ipRE = new RegExp(
-        /^((25[0-5]|2[0-4]\d|1\d{2}|0?\d{1,2})\.){3}(25[0-5]|2[0-4]\d|1\d{2}|0?\d{1,2})$/,
-    );
-
     logLines.forEach((line, i) => {
         const logLineChunkArr = line.split(' ');
         const ip = logLineChunkArr[0];
