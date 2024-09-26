@@ -58,7 +58,6 @@ To start the development server, run:
     yarn dev
    ```
 
-
 Once the server is running, visit `http://localhost:3000` in your browser to access the log parser.
 
 ### Deployment
@@ -92,7 +91,7 @@ Once running, you can access the app at `http://localhost:8080`.
 
 The parser expects logs to follow the **Common Log Format**. Example:
 
-    ```log
+    ```
     192.168.0.1 - - [10/Jul/2018:22:21:28 +0200] "GET /home HTTP/1.1" 200 3574 "-" "Mozilla/5.0"
     ```
 
