@@ -1,4 +1,4 @@
-# Log Parser
+# Next Log Parser
 
 ## Overview
 
@@ -113,6 +113,6 @@ Test files are located in the `tests` directory. The log parsing logic is thorou
 
 This project is intended to serve as a showcase of my learnings that I've been able to acquire during my time working at Mantel Group as an Associate Software Developer.
 
-I decided to expand upon my knowledge of the Next.js as a React framework by teaching myself how to use the App router structure, up until undertaking this project, I had only had exposure to the "pages" router structure.
+I decided to expand upon my knowledge of the Next.js as a React framework by teaching myself how to use the App router structure. Up until undertaking this project, I had only had exposure to the "pages" router structure.
 
 The decision was also made to containerise and deploy the project on Google Cloud Run to demonstrate the cloud computing skills that I'd developed through the completion of my GCP Associate Cloud Engineer cert, as well as through my experience working with cloud technologies and backend systems in TypeScript while on my engagement with Australian Energy Regulator (AER).
