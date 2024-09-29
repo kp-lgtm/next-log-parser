@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import log from './public/log.png';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -13,6 +14,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
+            <link rel="icon" href={log.src} type="image/png" />
             <body>{children}</body>
         </html>
     );
