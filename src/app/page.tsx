@@ -101,8 +101,8 @@ export default function Home() {
                                     <li key={index} className={styles.listItem}>
                                         {displayedItems.join(', ')}
                                         {othersCount > 0 &&
-                                            ` and ${othersCount} others`}{' '}
-                                        -{' '}
+                                            ` and ${othersCount} other`}
+                                        {othersCount > 1 && 's'} -{' '}
                                         <strong>
                                             {count} visit{count > 1 && 's'}
                                         </strong>
@@ -123,8 +123,8 @@ export default function Home() {
                                     <li key={index} className={styles.listItem}>
                                         {displayedItems.join(', ')}
                                         {othersCount > 0 &&
-                                            ` and ${othersCount} others`}{' '}
-                                        -{' '}
+                                            ` and ${othersCount} other`}
+                                        {othersCount > 1 && 's'} -{' '}
                                         <strong>
                                             {count} request{count > 1 && 's'}
                                         </strong>
