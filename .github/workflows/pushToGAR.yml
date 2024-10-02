@@ -15,27 +15,27 @@ jobs:
     build-push-artifact:
         runs-on: ubuntu-latest
         steps:
-            - name: "Checkout"
-            uses: "actions/checkout@v3"
+            - name: 'Checkout'
+              uses: 'actions/checkout@v3'
 
-            - id: "auth"
-            uses: "google-github-actions/auth@v1"
-            with:
-                credentials: ${{ secrets.SERVICE_ACCOUNT_KEY }}
+            - id: 'auth'
+              uses: 'google-github-actions/auth@v1'
+              with:
+                  credentials: ${{ secrets.SERVICE_ACCOUNT_KEY }}
 
-            - name: "Set up Cloud SDK"
-            uses: "google-github-actions/setup-gcloud@v1"
+            - name: 'Set up Cloud SDK'
+              uses: 'google-github-actions/setup-gcloud@v1'
 
-            - name: "Use gcloud CLI"
-            run: "gcloud info"
+            - name: 'Use gcloud CLI'
+              run: 'gcloud info'
 
-            - name: "Docker auth"
-            run: |-
-                gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
+            - name: 'Docker auth'
+              run: |-
+                  gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
 
-            - name: "Build image"
-            run: docker build . --file Dockerfile --tag ${{ env.GAR_LOCATION }}
-            working-directory: $GITHUB_WORKSPACE
+            - name: 'Build image'
+              run: docker build . --file Dockerfile --tag ${{ env.GAR_LOCATION }}
+              working-directory: $GITHUB_WORKSPACE
 
-            -name: "Push image"
-            run: docker push ${{ env.GAR_LOCATION }}
+            - name: 'Push image' # Fixes the syntax error
+              run: docker push ${{ env.GAR_LOCATION }}
