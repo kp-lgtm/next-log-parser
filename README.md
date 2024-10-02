@@ -24,7 +24,7 @@ You can access the deployed app here: [Log Parser App](https://next-log-parser-6
 ### Prerequisites
 
 Make sure you have the following installed:
-- **Node.js** (v14.x or higher)
+- **Node.js**
 - **npm** or **yarn**
 
 ### Installation
