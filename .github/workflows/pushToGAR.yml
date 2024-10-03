@@ -1,4 +1,4 @@
-name: Build and Push to Artifact Registry
+name: Build and Push to Google Container Registry
 
 on:
     workflow_dispatch:
@@ -8,11 +8,9 @@ on:
 
 env:
     PROJECT_ID: ${{ secrets.PROJECT_ID }}
-    REGION: ${{ secrets.REGION }}
-    GAR_LOCATION: ${{ secrets.GAR_LOCATION }}
 
 jobs:
-    build-push-artifact:
+    build-push-container:
         runs-on: ubuntu-latest
         steps:
             - name: 'Checkout'
@@ -26,16 +24,12 @@ jobs:
             - name: 'Set up Cloud SDK'
               uses: 'google-github-actions/setup-gcloud@v1'
 
-            - name: 'Use gcloud CLI'
-              run: 'gcloud info'
-
             - name: 'Docker auth'
               run: |-
-                  gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
+                  gcloud auth configure-docker gcr.io --quiet
 
             - name: 'Build image'
-              run: docker build . --file Dockerfile --tag ${{ env.GAR_LOCATION }}
-              working-directory: ./
+              run: docker build . --file Dockerfile --tag gcr.io/${{ secrets.PROJECT_ID }}/next-log-parser
 
-            - name: 'Push image' # Fixes the syntax error
-              run: docker push ${{ env.GAR_LOCATION }}
+            - name: 'Push image'
+              run: docker push gcr.io/${{ secrets.PROJECT_ID }}/next-log-parser
