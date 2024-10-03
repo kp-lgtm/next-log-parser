@@ -35,7 +35,7 @@ jobs:
 
             - name: 'Build image'
               run: docker build . --file Dockerfile --tag ${{ env.GAR_LOCATION }}
-              working-directory: $GITHUB_WORKSPACE
+              working-directory: ~/Dockerfile
 
             - name: 'Push image' # Fixes the syntax error
               run: docker push ${{ env.GAR_LOCATION }}
