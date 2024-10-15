@@ -3,6 +3,7 @@ import { parseLog } from '@/utils/logParser';
 import { writeFile, mkdir, unlink } from 'fs/promises';
 import { NextRequest, NextResponse } from 'next/server';
 import { join } from 'path';
+import { existsSync } from 'fs';
 
 export async function POST(req: NextRequest) {
     const data = await req.formData();
@@ -16,7 +17,7 @@ export async function POST(req: NextRequest) {
     const buffer = Buffer.from(bytes);
 
     const uploadDir = join(process.cwd(), 'uploads');
-    const filePath = join(process.cwd(), 'uploads', logFile.name);
+    let filePath = join(process.cwd(), 'uploads', logFile.name);
 
     try {
         await mkdir(uploadDir, { recursive: true });
@@ -29,6 +30,16 @@ export async function POST(req: NextRequest) {
     }
 
     try {
+        // If a file with the same name name already exists in
+        // the uploads directory, append (i) to the file name
+        if (existsSync(filePath)) {
+            let i = 1;
+            while (existsSync(`${filePath}(${i})`)) {
+                i++;
+            }
+            filePath = `${filePath}(${i})`;
+        }
+
         await writeFile(filePath, buffer);
         logger.info('File saved to:', filePath);
 
