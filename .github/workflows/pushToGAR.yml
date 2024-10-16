@@ -16,20 +16,18 @@ jobs:
             - name: 'Checkout'
               uses: 'actions/checkout@v4'
 
-            - id: 'auth'
-              uses: 'google-github-actions/auth@v2'
+            - name: Authenticate to Google Cloud
+              id: auth
+              uses: google-github-actions/auth@v2
               with:
-                  credentials_json: ${{ secrets.SERVICE_ACCOUNT_KEY }}
+                  service_account: githubactions@next-log-parser.iam.gserviceaccount.com
 
-            - name: 'Set up Cloud SDK'
-              uses: 'google-github-actions/setup-gcloud@v1'
-
-            - name: 'Docker auth'
-              run: |-
-                  gcloud auth configure-docker gcr.io --quiet
-
-            - name: 'Build image'
-              run: docker build . --file Dockerfile --tag gcr.io/${{ secrets.PROJECT_ID }}/next-log-parser
-
-            - name: 'Push image'
-              run: docker push gcr.io/${{ secrets.PROJECT_ID }}/next-log-parser
+            - uses: RafikFarhad/push-to-gcr-github-action@v4.1
+              with:
+                  gcloud_service_key: ${{ secrets.SERVICE_ACCOUNT_KEY }}
+                  registry: gcr.io/next-log-parser/next-log-parser
+                  project_id: next-log-parser
+                  image_name: next-log-parser
+                  image_tag: latest
+                  dockerfile: ./Dockerfile
+                  context: .
