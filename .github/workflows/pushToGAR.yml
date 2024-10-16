@@ -13,40 +13,21 @@ jobs:
     build-push-container:
         runs-on: ubuntu-latest
         steps:
-            - name: Checkout repository
-              uses: actions/checkout@v2
+            - name: 'Checkout'
+              uses: 'actions/checkout@v4'
 
-            - name: Set up Docker Buildx
-              uses: docker/setup-buildx-action@v1
+            - name: Authenticate to Google Cloud
+              id: auth
+              uses: google-github-actions/auth@v2
+              with:
+                  service_account: githubactions@next-log-parser.iam.gserviceaccount.com
 
-            - name: Login to Google Container Registry
-              run: |-
-                  echo ${{ secrets.SERVICE_ACCOUNT_KEY }} | docker login -u _json_key --password-stdin https://gcr.io
-
-            - name: Build Docker image
-              run: |-
-                  docker build -t gcr.io/$PROJECT_ID/my-image:${{ github.sha }} .
-
-            - name: Push Docker image to GCR
-              run: |-
-                  docker push gcr.io/$PROJECT_ID/my-image:${{ github.sha }}
-
-        # steps:
-        #     - name: 'Checkout'
-        #       uses: 'actions/checkout@v4'
-
-        #     - name: Authenticate to Google Cloud
-        #       id: auth
-        #       uses: google-github-actions/auth@v2
-        #       with:
-        #           service_account: githubactions@next-log-parser.iam.gserviceaccount.com
-
-        #     - uses: RafikFarhad/push-to-gcr-github-action@v4.1
-        #       with:
-        #           gcloud_service_key: ${{ secrets.SERVICE_ACCOUNT_KEY }}
-        #           registry: gcr.io/next-log-parser/next-log-parser
-        #           project_id: next-log-parser
-        #           image_name: next-log-parser
-        #           image_tag: latest
-        #           dockerfile: ./Dockerfile
-        #           context: .
+            - uses: RafikFarhad/push-to-gcr-github-action@v4.1
+              with:
+                  gcloud_service_key: ${{ secrets.SERVICE_ACCOUNT_KEY }}
+                  registry: gcr.io/next-log-parser/next-log-parser
+                  project_id: next-log-parser
+                  image_name: next-log-parser
+                  image_tag: latest
+                  dockerfile: ./Dockerfile
+                  context: .
