@@ -35,3 +35,11 @@ jobs:
                   image_tag: latest
                   dockerfile: ./Dockerfile
                   context: .
+
+            - name: Deploy to Cloud Run
+              run: |
+                  gcloud run deploy next-log-parser \
+                  --image gcr.io/${{ env.PROJECT_ID }}/next-log-parser:latest \
+                  --region australia-southeast1 \
+                  --platform managed \
+                  --allow-unauthenticated
