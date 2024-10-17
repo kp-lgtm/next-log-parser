@@ -25,7 +25,7 @@ jobs:
               uses: google-github-actions/auth@v2
               with:
                   workload_identity_provider: projects/643135354132/locations/global/workloadIdentityPools/github/providers/personal-repo
-                  service_account: githubactions@next-log-parser.iam.gserviceaccount.com
+                  service_account: 'githubactions@next-log-parser.iam.gserviceaccount.com'
 
             - uses: RafikFarhad/push-to-gcr-github-action@v5-rc1
               with:
