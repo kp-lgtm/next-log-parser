@@ -29,7 +29,7 @@ jobs:
 
             - uses: RafikFarhad/push-to-gcr-github-action@v5-rc1
               with:
-                  registry: gcr.io/next-log-parser/next-log-parser
+                  registry: gcr.io
                   project_id: next-log-parser
                   image_name: next-log-parser
                   image_tag: latest
