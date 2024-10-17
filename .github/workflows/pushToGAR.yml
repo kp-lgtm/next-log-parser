@@ -1,4 +1,4 @@
-name: Build and Push to Google Container Registry
+name: Push And Deploy To GCP
 
 on:
     workflow_dispatch:
