@@ -6,6 +6,10 @@ on:
         branches:
             - main
 
+permissions:
+    id-token: write
+    contents: read
+
 env:
     PROJECT_ID: ${{ secrets.PROJECT_ID }}
 
@@ -23,9 +27,8 @@ jobs:
                   workload_identity_provider: projects/643135354132/locations/global/workloadIdentityPools/github/providers/personal-repo
                   service_account: githubactions@next-log-parser.iam.gserviceaccount.com
 
-            - uses: RafikFarhad/push-to-gcr-github-action@v4.1
+            - uses: RafikFarhad/push-to-gcr-github-action@v5-rc1
               with:
-                  gcloud_service_key: ${{ secrets.SERVICE_ACCOUNT_KEY }}
                   registry: gcr.io/next-log-parser/next-log-parser
                   project_id: next-log-parser
                   image_name: next-log-parser
